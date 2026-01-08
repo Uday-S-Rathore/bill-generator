@@ -26,13 +26,16 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
         }}
       >
         {/* Header */}
-        <div style={{ textAlign: 'center', borderBottom: '2px solid #000', paddingBottom: '10px', marginBottom: '20px' }}>
-          <h2 style={{ margin: 0, fontSize: '22px', textTransform: 'uppercase', letterSpacing: '1px' }}>Electricity Bill</h2>
-          {/* New Month Field */}
-          <p style={{ margin: '5px 0 0 0', fontSize: '14px', color: '#555' }}>
-             For: <span style={{ fontWeight: 'bold', color: '#000' }}>{data.billMonth}</span>
-          </p>
-        </div>
+        {/* Header section in BillTemplate.jsx */}
+<div style={{ textAlign: 'center', borderBottom: '2px solid #000', paddingBottom: '10px', marginBottom: '20px' }}>
+  <h2 style={{ margin: 0, fontSize: '22px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+    Electricity Bill
+  </h2>
+  {/* Restored the "For" label with first letter capital */}
+  <p style={{ margin: '5px 0 0 0', fontSize: '16px', color: '#333' }}>
+     For: <span style={{ fontWeight: 'bold', color: '#000' }}>{data.billMonth} 2026</span>
+  </p>
+</div>
 
         {/* Basic Info */}
         <div style={{ marginBottom: '20px', fontSize: '14px' }}>
