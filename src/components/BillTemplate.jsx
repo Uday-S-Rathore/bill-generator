@@ -5,11 +5,15 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
   const totalAmount = units * Number(data.rate);
   const formatNumber = (num) => new Intl.NumberFormat('en-IN').format(num);
 
-  // Helper to change 2026-01-09 -> 09/01/2026
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
+  };
+
+  // The Modern Font Stack for a clean, professional look
+  const fontStyle = {
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
   };
 
   return (
@@ -17,69 +21,79 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
       <div 
         ref={ref} 
         style={{ 
+          ...fontStyle,
           width: '350px', 
           backgroundColor: '#ffffff', 
           padding: '30px', 
           color: '#000000', 
-          fontFamily: 'Arial, sans-serif',
           border: '2px solid #000'
         }}
       >
         {/* Header */}
-        {/* Header section in BillTemplate.jsx */}
-<div style={{ textAlign: 'center', borderBottom: '2px solid #000', paddingBottom: '10px', marginBottom: '20px' }}>
-  <h2 style={{ margin: 0, fontSize: '22px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-    Electricity Bill
-  </h2>
-  {/* Restored the "For" label with first letter capital */}
-  <p style={{ margin: '5px 0 0 0', fontSize: '16px', color: '#333' }}>
-     For: <span style={{ fontWeight: 'bold', color: '#000' }}>{data.billMonth} 2026</span>
-  </p>
-</div>
+        <div style={{ textAlign: 'center', borderBottom: '2px solid #000', paddingBottom: '10px', marginBottom: '20px' }}>
+          <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '2px' }}>
+            Electricity Bill
+          </h2>
+          <p style={{ margin: '5px 0 0 0', fontSize: '16px', color: '#333' }}>
+             For: <span style={{ fontWeight: 'bold', color: '#000' }}>{data.billMonth} 2026</span>
+          </p>
+        </div>
 
         {/* Basic Info */}
         <div style={{ marginBottom: '20px', fontSize: '14px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <span style={{ fontWeight: 'bold' }}>Bill Date:</span>
-            {/* Using the new formatter here */}
-            <span>{formatDate(data.billDate)}</span>
+            <span style={{ color: '#666', fontWeight: '600' }}>Bill Date:</span>
+            <span style={{ fontWeight: '700' }}>{formatDate(data.billDate)}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', paddingBottom: '8px' }}>
-            <span style={{ fontWeight: 'bold' }}>Tenant:</span>
-            {/* Changed to 'capitalize' so it is not all caps */}
-            <span style={{ textTransform: 'capitalize' }}>{data.tenantName || '_________'}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
+            <span style={{ color: '#666', fontWeight: '600' }}>Tenant:</span>
+            <span style={{ textTransform: 'capitalize', fontWeight: '700' }}>{data.tenantName || '_________'}</span>
           </div>
         </div>
 
-        {/* Calculations Box */}
-        <div style={{ backgroundColor: '#f9fafb', border: '1px solid #000', padding: '15px', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+        {/* Meter Readings Box */}
+        <div style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', padding: '15px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '13px' }}>
             <span>Current Reading:</span>
-            <span style={{ fontWeight: 'bold' }}>{formatNumber(data.currReading || 0)}</span>
+            <span style={{ fontWeight: 'bold', fontFamily: 'monospace', fontSize: '15px' }}>{formatNumber(data.currReading || 0)}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
             <span>Previous Reading:</span>
-            <span style={{ fontWeight: 'bold' }}>{formatNumber(data.prevReading || 0)}</span>
-          </div>
-          <div style={{ borderTop: '1px solid #ccc', margin: '10px 0' }}></div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: 'bold' }}>
-            <span>Total Units:</span>
-            <span>{formatNumber(units > 0 ? units : 0)}</span>
+            <span style={{ fontWeight: 'bold', fontFamily: 'monospace', fontSize: '15px' }}>{formatNumber(data.prevReading || 0)}</span>
           </div>
         </div>
 
-        {/* Total Amount */}
-        <div style={{ textAlign: 'center', marginTop: '30px' }}>
-          <div style={{ fontSize: '14px', color: '#666' }}>Amount to Pay</div>
-          <div style={{ fontSize: '36px', fontWeight: 'bold', margin: '5px 0' }}>
+        {/* Change No. 2: Units Consumed Highlight Badge */}
+        <div 
+          style={{ 
+            marginTop: '15px', 
+            textAlign: 'center', 
+            padding: '12px', 
+            border: '2px dashed #3b82f6', 
+            backgroundColor: '#eff6ff',
+            borderRadius: '8px'
+          }}
+        >
+            <span style={{ fontSize: '11px', color: '#1e40af', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Units Consumed
+            </span>
+            <div style={{ fontSize: '32px', fontWeight: '900', color: '#1e40af', lineHeight: '1' }}>
+                {units > 0 ? units : 0}
+            </div>
+        </div>
+
+        {/* Total Amount Section */}
+        <div style={{ marginTop: '30px', textAlign: 'center' }}>
+          <div style={{ fontSize: '13px', color: '#666', fontWeight: '600', textTransform: 'uppercase' }}>Amount to Pay</div>
+          <div style={{ fontSize: '42px', fontWeight: '900', margin: '5px 0', letterSpacing: '-1px' }}>
             ₹{formatNumber(totalAmount > 0 ? totalAmount : 0)}
           </div>
-          <div style={{ fontSize: '12px', color: '#999' }}>Rate: ₹{data.rate}/unit</div>
+          <div style={{ fontSize: '12px', color: '#999', marginTop: '5px' }}>Rate Applied: ₹{data.rate}/unit</div>
         </div>
 
         {/* Footer */}
-        <div style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '15px', textAlign: 'center', fontSize: '12px', color: '#888' }}>
-          Please pay before the due date.
+        <div style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '15px', textAlign: 'center', fontSize: '11px', color: '#999', fontStyle: 'italic' }}>
+          Please pay before the due date. Thank you!
         </div>
       </div>
     </div>
