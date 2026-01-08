@@ -8,7 +8,7 @@ function App() {
     tenantName: '',
     prevReading: '',
     currReading: '',
-    rate: 10,
+    rate: 8,
     billDate: new Date().toISOString().split('T')[0]
   });
 
