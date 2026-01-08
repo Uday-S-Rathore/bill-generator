@@ -26,24 +26,23 @@ function App() {
 
 const handleDownload = async () => {
   if (receiptRef.current) {
-    try {
-      // We add these options to ensure CSS and colors are captured on mobile
-      const canvas = await html2canvas(receiptRef.current, {
-        scale: 2,             // High quality
-        useCORS: true,        // Helps with images/fonts
-        logging: false,       // Keeps console clean
-        backgroundColor: "#ffffff", // Forces white background
-        width: 350,           // Matches our template width
-        windowWidth: 350      // Forces the "view" to be the template width
-      });
-      
-      const link = document.createElement('a');
-      link.download = `Bill-${data.tenantName || 'Tenant'}.png`;
-      link.href = canvas.toDataURL('image/png', 1.0);
-      link.click();
-    } catch (err) {
-      console.error("Download failed", err);
-    }
+    const canvas = await html2canvas(receiptRef.current, {
+      scale: 3,             // Higher scale for better quality
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#ffffff",
+      scrollX: 0,
+      scrollY: -window.scrollY, // Fixes issues if you are scrolled down
+      onclone: (clonedDoc) => {
+        // This ensures the element is visible during the "photo"
+        clonedDoc.style.display = 'block';
+      }
+    });
+    
+    const link = document.createElement('a');
+    link.download = `Bill-${data.tenantName || 'Tenant'}.png`;
+    link.href = canvas.toDataURL('image/png', 1.0);
+    link.click();
   }
 };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 
 const BillTemplate = React.forwardRef(({ data }, ref) => {
-  
   const units = (Number(data.currReading) || 0) - (Number(data.prevReading) || 0);
   const totalAmount = units * Number(data.rate);
 
@@ -10,70 +9,59 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
   };
 
   return (
-    <div className="flex justify-center mt-8 mb-20">
-      {/* Main Container - Forced White Background */}
+    <div className="flex justify-center mt-4 mb-20">
       <div 
         ref={ref} 
-        className="w-[350px] p-6 border-2 border-gray-800 text-gray-900 font-sans"
-        style={{ minHeight: '500px', backgroundColor: '#ffffff' }}
+        className="w-[350px] p-8"
+        style={{ backgroundColor: '#ffffff', color: '#000000', fontFamily: 'sans-serif' }}
       >
-        
         {/* Header */}
-        <div className="text-center border-b-2 border-gray-800 pb-4 mb-4" style={{ borderColor: '#1f2937' }}>
-          <h1 className="text-2xl font-bold uppercase tracking-wider">Electricity Bill</h1>
+        <div style={{ textAlign: 'center', borderBottom: '2px solid #000', paddingBottom: '15px', marginBottom: '20px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0', textTransform: 'uppercase' }}>Electricity Bill</h1>
         </div>
 
-        {/* Details Table */}
-        <div className="space-y-3 text-sm">
-            <div className="grid grid-cols-2">
-                <span className="font-semibold">Date:</span>
-                <span className="text-right">{data.billDate}</span>
-            </div>
-            <div className="grid grid-cols-2 border-b border-gray-300 pb-2" style={{ borderColor: '#d1d5db' }}>
-                <span className="font-semibold">Tenant:</span>
-                <span className="text-right uppercase truncate">{data.tenantName || '_________'}</span>
-            </div>
+        {/* Info Rows */}
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{ display: 'flex', marginBottom: '10px' }}>
+            <div style={{ width: '50%', fontWeight: 'bold' }}>Date:</div>
+            <div style={{ width: '50%', textAlign: 'right' }}>{data.billDate}</div>
+          </div>
+          <div style={{ display: 'flex', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
+            <div style={{ width: '50%', fontWeight: 'bold' }}>Tenant:</div>
+            <div style={{ width: '50%', textAlign: 'right', textTransform: 'uppercase' }}>{data.tenantName || '_________'}</div>
+          </div>
         </div>
 
-        {/* Meter Readings Box - Forced Gray Background and Border */}
-        <div 
-          className="mt-6 border p-3" 
-          style={{ 
-            backgroundColor: '#f9fafb', 
-            borderColor: '#1f2937',
-            borderStyle: 'solid',
-            borderWidth: '1px'
-          }}
-        >
-            <div className="grid grid-cols-2 mb-2">
-                <span className="font-semibold">Current Reading:</span>
-                <span className="font-mono font-bold text-right">{formatNumber(data.currReading)}</span>
-            </div>
-            <div className="grid grid-cols-2 mb-2">
-                <span className="font-semibold">Previous Reading:</span>
-                <span className="font-mono font-bold text-right">{formatNumber(data.prevReading)}</span>
-            </div>
-            <div className="border-t my-2" style={{ borderColor: '#9ca3af' }}></div>
-            <div className="grid grid-cols-2 text-lg font-bold">
-                <span>Total Units:</span>
-                <span className="text-right">{formatNumber(units)}</span>
-            </div>
+        {/* Readings Box */}
+        <div style={{ backgroundColor: '#f3f4f6', border: '1px solid #000', padding: '15px' }}>
+          <div style={{ display: 'flex', marginBottom: '8px' }}>
+            <div style={{ width: '60%' }}>Current Reading:</div>
+            <div style={{ width: '40%', textAlign: 'right', fontWeight: 'bold' }}>{formatNumber(data.currReading)}</div>
+          </div>
+          <div style={{ display: 'flex', marginBottom: '8px' }}>
+            <div style={{ width: '60%' }}>Previous Reading:</div>
+            <div style={{ width: '40%', textAlign: 'right', fontWeight: 'bold' }}>{formatNumber(data.prevReading)}</div>
+          </div>
+          <div style={{ borderTop: '1px solid #999', margin: '10px 0' }}></div>
+          <div style={{ display: 'flex', fontSize: '18px', fontWeight: 'bold' }}>
+            <div style={{ width: '60%' }}>Total Units:</div>
+            <div style={{ width: '40%', textAlign: 'right' }}>{formatNumber(units)}</div>
+          </div>
         </div>
 
         {/* Grand Total */}
-        <div className="mt-8 text-center">
-            <p className="text-sm text-gray-500 mb-1">Amount to Pay</p>
-            <div className="text-4xl font-extrabold text-black">
-                ₹ {formatNumber(totalAmount)}
-            </div>
-            <p className="text-xs text-gray-400 mt-4">Rate Applied: ₹{data.rate}/unit</p>
+        <div style={{ marginTop: '30px', textAlign: 'center' }}>
+          <div style={{ fontSize: '14px', color: '#666' }}>Amount to Pay</div>
+          <div style={{ fontSize: '36px', fontWeight: '900', margin: '5px 0' }}>
+            ₹ {formatNumber(totalAmount)}
+          </div>
+          <div style={{ fontSize: '12px', color: '#999', marginTop: '10px' }}>Rate: ₹{data.rate}/unit</div>
         </div>
 
         {/* Footer */}
-        <div className="mt-12 text-center text-xs text-gray-400 border-t pt-4" style={{ borderColor: '#e5e7eb' }}>
-            <p className="px-2">Please pay before the due date.</p>
+        <div style={{ marginTop: '40px', paddingTop: '15px', borderTop: '1px solid #eee', textAlign: 'center', fontSize: '12px', color: '#666' }}>
+          Please pay before the due date.
         </div>
-
       </div>
     </div>
   );
