@@ -37,22 +37,23 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
             </div>
         </div>
 
-        {/* Meter Readings Box (With Indian Commas) */}
-        <div className="mt-6 border border-gray-800 p-3 bg-gray-50">
-            <div className="flex justify-between mb-2">
-                <span>Current Reading:</span>
-                <span className="font-mono font-bold">{formatNumber(data.currReading)}</span>
-            </div>
-            <div className="flex justify-between mb-2">
-                <span>Previous Reading:</span>
-                <span className="font-mono font-bold">{formatNumber(data.prevReading)}</span>
-            </div>
-            <div className="border-t border-gray-400 my-2"></div>
-            <div className="flex justify-between text-lg font-bold">
-                <span>Total Units:</span>
-                <span>{formatNumber(units)}</span>
-            </div>
-        </div>
+        {/* Meter Readings Box (Fixed for Mobile Download Overlap) */}
+<div className="mt-6 border border-gray-800 p-3 bg-gray-50">
+    <div className="flex justify-between mb-2 items-center">
+        {/* Added tracking-wide and a specific width to prevent overlapping */}
+        <span className="font-semibold tracking-wide min-w-[120px]">Current Reading:</span>
+        <span className="font-mono font-bold text-right">{formatNumber(data.currReading)}</span>
+    </div>
+    <div className="flex justify-between mb-2 items-center">
+        <span className="font-semibold tracking-wide min-w-[120px]">Previous Reading:</span>
+        <span className="font-mono font-bold text-right">{formatNumber(data.prevReading)}</span>
+    </div>
+    <div className="border-t border-gray-400 my-2"></div>
+    <div className="flex justify-between text-lg font-bold items-center">
+        <span className="tracking-wide">Total Units:</span>
+        <span>{formatNumber(units)}</span>
+    </div>
+</div>
 
         {/* Grand Total (With Indian Commas) */}
         <div className="mt-8 text-center">
