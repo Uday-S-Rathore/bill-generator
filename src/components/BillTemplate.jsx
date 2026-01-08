@@ -63,24 +63,47 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
           </div>
         </div>
 
-        {/* Change No. 2: Units Consumed Highlight Badge */}
-        <div 
-          style={{ 
-            marginTop: '15px', 
-            textAlign: 'center', 
-            padding: '12px', 
-            border: '2px dashed #3b82f6', 
-            backgroundColor: '#eff6ff',
-            borderRadius: '8px'
-          }}
-        >
-            <span style={{ fontSize: '11px', color: '#1e40af', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                Units Consumed
-            </span>
-            <div style={{ fontSize: '32px', fontWeight: '900', color: '#1e40af', lineHeight: '1' }}>
-                {units > 0 ? units : 0}
-            </div>
+        
+{/* Units Consumed Highlight Badge - "Table-Cell" Centering Fix */}
+<div 
+  style={{ 
+    marginTop: '15px', 
+    border: '2px dashed #3b82f6', 
+    backgroundColor: '#eff6ff',
+    borderRadius: '8px',
+    width: '100%',
+    height: '90px', // Slightly taller for more breathing room
+    display: 'table', // Forces a table structure
+    borderCollapse: 'separate'
+  }}
+>
+    <div style={{ 
+      display: 'table-cell', 
+      verticalAlign: 'middle', 
+      textAlign: 'center' 
+    }}>
+        <div style={{ 
+          fontSize: '11px', 
+          color: '#1e40af', 
+          fontWeight: '800', 
+          textTransform: 'uppercase', 
+          letterSpacing: '1px',
+          marginBottom: '2px'
+        }}>
+            Units Consumed
         </div>
+        <div style={{ 
+          fontSize: '34px', 
+          fontWeight: '900', 
+          color: '#1e40af', 
+          lineHeight: '34px', // Matches font size exactly to prevent extra spacing
+          margin: '0',
+          display: 'block'
+        }}>
+            {units > 0 ? units : 0}
+        </div>
+    </div>
+</div>
 
         {/* Total Amount Section */}
         <div style={{ marginTop: '30px', textAlign: 'center' }}>
