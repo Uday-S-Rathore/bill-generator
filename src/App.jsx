@@ -6,10 +6,11 @@ import html2canvas from 'html2canvas';
 function App() {
   const [data, setData] = useState({
     tenantName: '',
+    billMonth: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }), // Default: "January 2026"
+    billDate: new Date().toISOString().split('T')[0], // Default: Today (YYYY-MM-DD)
     prevReading: '',
     currReading: '',
-    rate: 8,
-    billDate: new Date().toISOString().split('T')[0]
+    rate: 8
   });
 
   const receiptRef = useRef(null);
@@ -26,6 +27,8 @@ function App() {
           backgroundColor: "#ffffff",
           useCORS: true,
           logging: false,
+          width: receiptRef.current.offsetWidth,
+          height: receiptRef.current.offsetHeight
         });
         
         const link = document.createElement('a');
@@ -55,7 +58,7 @@ function App() {
         </div>
 
         {/* Right Side: Preview */}
-        <div className="w-full md:w-1/2 flex justify-center bg-gray-200 p-4 rounded-xl border border-gray-300">
+        <div className="w-full md:w-1/2 flex justify-center bg-gray-200 p-4 rounded-xl border border-gray-300 overflow-auto">
           <BillTemplate data={data} ref={receiptRef} />
         </div>
       </div>
