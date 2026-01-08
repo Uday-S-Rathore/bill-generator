@@ -22,18 +22,30 @@ function App() {
   };
 
   // 4. The Download Function
-  const handleDownload = async () => {
-    if (receiptRef.current) {
-      // Create the image
-      const canvas = await html2canvas(receiptRef.current, { scale: 2 });
+  // src/App.jsx
+
+const handleDownload = async () => {
+  if (receiptRef.current) {
+    try {
+      // We add these options to ensure CSS and colors are captured on mobile
+      const canvas = await html2canvas(receiptRef.current, {
+        scale: 2,             // High quality
+        useCORS: true,        // Helps with images/fonts
+        logging: false,       // Keeps console clean
+        backgroundColor: "#ffffff", // Forces white background
+        width: 350,           // Matches our template width
+        windowWidth: 350      // Forces the "view" to be the template width
+      });
       
-      // Trigger the download
       const link = document.createElement('a');
       link.download = `Bill-${data.tenantName || 'Tenant'}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.href = canvas.toDataURL('image/png', 1.0);
       link.click();
+    } catch (err) {
+      console.error("Download failed", err);
     }
-  };
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row gap-8 p-4 md:p-10">
