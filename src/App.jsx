@@ -1,7 +1,8 @@
+import html2canvas from 'html2canvas';
 import { useState, useRef } from 'react';
 import BillForm from './components/BillForm';
 import BillTemplate from './components/BillTemplate';
-import html2canvas from 'html2canvas';
+
 
 function App() {
   // 1. The State lives here now!
@@ -26,23 +27,26 @@ function App() {
 
 const handleDownload = async () => {
   if (receiptRef.current) {
-    const canvas = await html2canvas(receiptRef.current, {
-      scale: 3,             // Higher scale for better quality
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: "#ffffff",
-      scrollX: 0,
-      scrollY: -window.scrollY, // Fixes issues if you are scrolled down
-      onclone: (clonedDoc) => {
-        // This ensures the element is visible during the "photo"
-        clonedDoc.style.display = 'block';
-      }
-    });
-    
-    const link = document.createElement('a');
-    link.download = `Bill-${data.tenantName || 'Tenant'}.png`;
-    link.href = canvas.toDataURL('image/png', 1.0);
-    link.click();
+    try {
+      // Simple, high-compatibility settings
+      const canvas = await html2canvas(receiptRef.current, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        // This ensures it captures exactly what's in the box
+        width: receiptRef.current.offsetWidth,
+        height: receiptRef.current.offsetHeight
+      });
+      
+      const image = canvas.toDataURL("image/png", 1.0);
+      const link = document.createElement('a');
+      link.download = `Bill-${data.tenantName || 'Tenant'}.png`;
+      link.href = image;
+      link.click();
+    } catch (error) {
+      console.error("Download failed:", error);
+      alert("Could not generate image. Please try again.");
+    }
   }
 };
 
