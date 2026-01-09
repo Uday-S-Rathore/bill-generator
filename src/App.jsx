@@ -6,24 +6,47 @@ import html2canvas from 'html2canvas';
 function App() {
   const [data, setData] = useState({
     tenantName: '',
-    billMonth: new Date().toLocaleString('default', { month: 'long' }), // Default: "January 2026"
-    billDate: new Date().toISOString().split('T')[0], // Default: Today (YYYY-MM-DD)
+    billMonth: new Date().toLocaleString('default', { month: 'long' }), 
+    billDate: new Date().toISOString().split('T')[0],
     prevReading: '',
     currReading: '',
-    rate: 8
+    rate: 8,
+    
+    // Advanced Mode Data
+    mode: 'single', 
+    meter2Name: '', // NEW: Stores name for the second meter/person
+    prevReading2: '', 
+    currReading2: ''       
   });
 
   const receiptRef = useRef(null);
 
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    // LOGIC: If the user changes 'mode', we reset the reading fields
+    // so they start with a fresh slate.
+    if (name === 'mode') {
+        setData(prev => ({
+            ...prev,
+            mode: value,
+            prevReading: '',   // Wipe Main Readings
+            currReading: '',
+            prevReading2: '',  // Wipe Secondary Readings
+            currReading2: '',
+            meter2Name: ''     // Optional: Wipe the name too, or keep it. I'll wipe it for a fresh start.
+        }));
+    } else {
+        // Normal update for all other fields
+        setData({ ...data, [name]: value });
+    }
   };
 
   const handleDownload = async () => {
     if (receiptRef.current) {
       try {
         const canvas = await html2canvas(receiptRef.current, {
-          scale: 5,
+          scale: 4, 
           backgroundColor: "#ffffff",
           useCORS: true,
           logging: false,
@@ -44,8 +67,6 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-10">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8">
-        
-        {/* Left Side: Form */}
         <div className="w-full md:w-1/2">
           <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">⚡ Bill Gen</h1>
           <BillForm data={data} handleChange={handleChange} />
@@ -57,7 +78,6 @@ function App() {
           </button>
         </div>
 
-        {/* Right Side: Preview */}
         <div className="w-full md:w-1/2 flex justify-center bg-gray-200 p-4 rounded-xl border border-gray-300 overflow-auto">
           <BillTemplate data={data} ref={receiptRef} />
         </div>
