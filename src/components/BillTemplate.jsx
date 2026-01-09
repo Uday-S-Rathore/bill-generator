@@ -4,6 +4,7 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
   const units = (Number(data.currReading) || 0) - (Number(data.prevReading) || 0);
   const totalAmount = units * Number(data.rate);
   const formatNumber = (num) => new Intl.NumberFormat('en-IN').format(num);
+  const currentYear = new Date().getFullYear();
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
@@ -34,8 +35,9 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
           <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '2px' }}>
             Electricity Bill
           </h2>
+          {/* FIXED: Uses data.billMonth + Dynamic currentYear */}
           <p style={{ margin: '5px 0 0 0', fontSize: '16px', color: '#333' }}>
-             For: <span style={{ fontWeight: 'bold', color: '#000' }}>{data.billMonth} 2026</span>
+             For: <span style={{ fontWeight: 'bold', color: '#000' }}>{data.billMonth} {currentYear}</span>
           </p>
         </div>
 
@@ -64,44 +66,34 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
         </div>
 
         
-{/* Units Consumed Highlight Badge - "Table-Cell" Centering Fix */}
+{/* Units Consumed Highlight Badge - The "Invisible Text" Fix */}
 <div 
   style={{ 
     marginTop: '15px', 
+    textAlign: 'center', 
     border: '2px dashed #3b82f6', 
-    backgroundColor: '#eff6ff',
+    backgroundColor: '#eff6ff', // Light blue background
     borderRadius: '8px',
-    width: '100%',
-    height: '90px', // Slightly taller for more breathing room
-    display: 'table', // Forces a table structure
-    borderCollapse: 'separate'
+    paddingTop: '10px'
   }}
 >
+    <span style={{ fontSize: '11px', color: '#1e40af', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>
+        Units Consumed
+    </span>
+    
+    <div style={{ fontSize: '32px', fontWeight: '900', color: '#1e40af', lineHeight: '1', marginTop: '5px' }}>
+        {units > 0 ? units : 0}
+    </div>
+
+    {/* NUCLEAR FIX: A real dot that blends into the background. 
+        The tool cannot ignore this because it is text. */}
     <div style={{ 
-      display: 'table-cell', 
-      verticalAlign: 'middle', 
-      textAlign: 'center' 
+      color: '#eff6ff', // Same as background color (invisible)
+      fontSize: '20px', // Forces exactly 20px of height
+      lineHeight: '20px',
+      userSelect: 'none'
     }}>
-        <div style={{ 
-          fontSize: '11px', 
-          color: '#1e40af', 
-          fontWeight: '800', 
-          textTransform: 'uppercase', 
-          letterSpacing: '1px',
-          marginBottom: '2px'
-        }}>
-            Units Consumed
-        </div>
-        <div style={{ 
-          fontSize: '34px', 
-          fontWeight: '900', 
-          color: '#1e40af', 
-          lineHeight: '34px', // Matches font size exactly to prevent extra spacing
-          margin: '0',
-          display: 'block'
-        }}>
-            {units > 0 ? units : 0}
-        </div>
+      .
     </div>
 </div>
 

@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 function App() {
   const [data, setData] = useState({
     tenantName: '',
-    billMonth: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }), // Default: "January 2026"
+    billMonth: new Date().toLocaleString('default', { month: 'long' }), // Default: "January 2026"
     billDate: new Date().toISOString().split('T')[0], // Default: Today (YYYY-MM-DD)
     prevReading: '',
     currReading: '',
