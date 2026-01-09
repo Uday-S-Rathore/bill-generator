@@ -23,7 +23,7 @@ function App() {
     if (receiptRef.current) {
       try {
         const canvas = await html2canvas(receiptRef.current, {
-          scale: 2,
+          scale: 5,
           backgroundColor: "#ffffff",
           useCORS: true,
           logging: false,
