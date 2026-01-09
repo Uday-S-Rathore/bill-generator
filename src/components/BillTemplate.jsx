@@ -44,25 +44,25 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
           color: '#000000', 
           border: '2px solid #000',
           overflow: 'hidden',
-          // FIX 1: Prevents mobile browsers from inflating text size
           WebkitTextSizeAdjust: '100%', 
           textSizeAdjust: '100%'
         }}
       >
         {/* Header */}
-        <div style={{ backgroundColor: '#172554', color: '#ffffff', padding: '25px', textAlign: 'center', borderBottom: '2px solid #000' }}>
-          <h2 style={{ margin: 0, fontSize: '26px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '5px' }}>
+        <div style={{ backgroundColor: '#172554', color: '#ffffff', padding: '20px', textAlign: 'center', borderBottom: '2px solid #000' }}>
+          <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '5px' }}>
             Electricity Bill
           </h2>
           <p style={{ margin: 0, fontSize: '11px', opacity: '0.8', letterSpacing: '2px', textTransform: 'uppercase' }}>Billing Period</p>
-          <p style={{ margin: '2px 0 0 0', fontSize: '20px', fontWeight: 'bold', color: '#fbbf24' }}>{data.billMonth} {currentYear}</p>
+          <p style={{ margin: '2px 0 0 0', fontSize: '18px', fontWeight: 'bold', color: '#fbbf24' }}>{data.billMonth} {currentYear}</p>
         </div>
 
-        <div style={{ padding: '30px' }}> 
+        {/* BODY - REDUCED PADDING TO 20px TO PREVENT CLIPPING */}
+        <div style={{ padding: '20px' }}> 
           
           {/* Info */}
-          <div style={{ marginBottom: '25px', fontSize: '15px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+          <div style={{ marginBottom: '25px', fontSize: '14px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
               <span style={{ color: '#666', fontWeight: '600' }}>Bill Date:</span>
               <span style={{ fontWeight: '700' }}>{formatDate(data.billDate)}</span>
             </div>
@@ -78,18 +78,19 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
             {/* Standard Mode */}
             {data.mode === 'single' && (
               <>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '14px' }}>
-                  <span>Current Reading:</span>
-                  <span style={{ fontWeight: 'bold', fontFamily: 'monospace', fontSize: '16px' }}>{formatNumber(data.currReading || 0)}</span>
+                {/* Changed Font Size to 13px and allowed wrapping */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', fontSize: '13px' }}>
+                  <span style={{ whiteSpace: 'nowrap', marginRight: '5px' }}>Current Reading:</span>
+                  <span style={{ fontWeight: 'bold', fontFamily: 'monospace', fontSize: '15px' }}>{formatNumber(data.currReading || 0)}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-                  <span>Previous Reading:</span>
-                  <span style={{ fontWeight: 'bold', fontFamily: 'monospace', fontSize: '16px' }}>{formatNumber(data.prevReading || 0)}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
+                  <span style={{ whiteSpace: 'nowrap', marginRight: '5px' }}>Previous Reading:</span>
+                  <span style={{ fontWeight: 'bold', fontFamily: 'monospace', fontSize: '15px' }}>{formatNumber(data.prevReading || 0)}</span>
                 </div>
               </>
             )}
 
-            {/* Advanced Modes - With Wrapping Fix */}
+            {/* Advanced Modes */}
             {data.mode !== 'single' && (
               <div style={{ fontSize: '13px' }}>
                 
@@ -98,8 +99,8 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
                     <div style={{ fontWeight: 'bold', color: '#333', marginBottom: '4px' }}>
                         {data.tenantName || "Main Tenant"}:
                     </div>
-                    {/* FIX 2: Added flexWrap and rowGap to handle long text gracefully */}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: '5px', color: '#555', fontFamily: 'monospace' }}>
+                    {/* Compact Font for detailed breakdown */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: '5px', color: '#555', fontFamily: 'monospace', fontSize: '12px' }}>
                         <span>Current: {data.currReading || 0}</span>
                         <span>Previous: {data.prevReading || 0}</span>
                         <span style={{ fontWeight: 'bold', color: '#000' }}>= {units1} Units</span>
@@ -112,7 +113,7 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
                          {data.mode === 'subtract' ? 'Less: ' : 'Add: '} 
                          {data.meter2Name || "Second Meter"}
                     </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: '5px', color: '#555', fontFamily: 'monospace' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: '5px', color: '#555', fontFamily: 'monospace', fontSize: '12px' }}>
                         <span>Current: {data.currReading2 || 0}</span>
                         <span>Previous: {data.prevReading2 || 0}</span>
                         <span style={{ fontWeight: 'bold', color: '#000' }}>= {units2} Units</span>
@@ -120,9 +121,9 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
                 </div>
 
                 {/* Summary */}
-                <div style={{ borderTop: '2px solid #ddd', marginTop: '10px', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', color: '#1e40af' }}>
-                  <span>{calculationLabel}:</span>
-                  <span>{finalUnits} Units</span>
+                <div style={{ borderTop: '2px solid #ddd', marginTop: '10px', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 'bold', color: '#1e40af' }}>
+                  <span style={{ fontSize: '13px' }}>{calculationLabel}:</span>
+                  <span style={{ fontSize: '14px' }}>{finalUnits} Units</span>
                 </div>
               </div>
             )}
