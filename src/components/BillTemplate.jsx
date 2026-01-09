@@ -33,13 +33,15 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
   };
 
   return (
-    <div className="flex justify-center mt-4 mb-20">
+    // FIX 1: 'w-fit mx-auto' centers the bill safely. 
+    // If the screen is too small, it aligns left so you can scroll.
+    <div className="w-fit mx-auto mt-4 mb-20">
       <div 
         ref={ref} 
         style={{ 
           ...fontStyle,
           
-          // THE FIX: These 3 lines force the box to stay 450px wide no matter what
+          // FIX 2: Force 450px width and prevent shrinking
           width: '450px',
           minWidth: '450px', 
           flexShrink: 0,

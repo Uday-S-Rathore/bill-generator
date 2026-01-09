@@ -78,9 +78,9 @@ function App() {
           </button>
         </div>
 
-        <div className="w-full md:w-1/2 flex justify-center bg-gray-200 p-4 rounded-xl border border-gray-300 overflow-auto">
-          <BillTemplate data={data} ref={receiptRef} />
-        </div>
+        <div className="w-full md:w-1/2 bg-gray-200 p-4 rounded-xl border border-gray-300 overflow-auto block">
+    <BillTemplate data={data} ref={receiptRef} />
+  </div>
       </div>
     </div>
   );
