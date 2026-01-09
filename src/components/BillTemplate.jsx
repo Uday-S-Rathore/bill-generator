@@ -3,7 +3,6 @@ import React from 'react';
 const BillTemplate = React.forwardRef(({ data }, ref) => {
   const formatNumber = (num) => new Intl.NumberFormat('en-IN').format(num);
 
-  // --- CALCULATIONS ---
   const units1 = (Number(data.currReading) || 0) - (Number(data.prevReading) || 0);
   const units2 = (Number(data.currReading2) || 0) - (Number(data.prevReading2) || 0);
 
@@ -21,7 +20,6 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
   if (finalUnits < 0) finalUnits = 0;
   const totalAmount = finalUnits * Number(data.rate);
 
-  // --- STYLES & DATES ---
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const [year, month, day] = dateString.split('-');
@@ -29,6 +27,7 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
   };
 
   const currentYear = new Date().getFullYear();
+
   const fontStyle = {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
   };
@@ -39,12 +38,15 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
         ref={ref} 
         style={{ 
           ...fontStyle,
-          width: '450px', 
+          width: '450px',
           backgroundColor: '#ffffff', 
           padding: '0px', 
           color: '#000000', 
           border: '2px solid #000',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          // FIX 1: Prevents mobile browsers from inflating text size
+          WebkitTextSizeAdjust: '100%', 
+          textSizeAdjust: '100%'
         }}
       >
         {/* Header */}
@@ -70,7 +72,7 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
             </div>
           </div>
 
-          {/* --- SMART METER READINGS BOX --- */}
+          {/* Meter Readings Box */}
           <div style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', padding: '15px', borderRadius: '6px' }}>
             
             {/* Standard Mode */}
@@ -87,36 +89,37 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
               </>
             )}
 
-            {/* Advanced Modes (Two distinct rows, NO Brackets) */}
+            {/* Advanced Modes - With Wrapping Fix */}
             {data.mode !== 'single' && (
               <div style={{ fontSize: '13px' }}>
                 
-                {/* Row 1: Main Person */}
+                {/* Row 1 */}
                 <div style={{ marginBottom: '12px', borderBottom: '1px dashed #ddd', paddingBottom: '8px' }}>
                     <div style={{ fontWeight: 'bold', color: '#333', marginBottom: '4px' }}>
                         {data.tenantName || "Main Tenant"}:
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', color: '#555', fontFamily: 'monospace' }}>
+                    {/* FIX 2: Added flexWrap and rowGap to handle long text gracefully */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: '5px', color: '#555', fontFamily: 'monospace' }}>
                         <span>Current: {data.currReading || 0}</span>
                         <span>Previous: {data.prevReading || 0}</span>
                         <span style={{ fontWeight: 'bold', color: '#000' }}>= {units1} Units</span>
                     </div>
                 </div>
 
-                {/* Row 2: Sub Person */}
+                {/* Row 2 */}
                 <div style={{ marginBottom: '8px' }}>
                     <div style={{ fontWeight: 'bold', color: data.mode === 'subtract' ? '#dc2626' : '#d97706', marginBottom: '4px' }}>
                          {data.mode === 'subtract' ? 'Less: ' : 'Add: '} 
                          {data.meter2Name || "Second Meter"}
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', color: '#555', fontFamily: 'monospace' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: '5px', color: '#555', fontFamily: 'monospace' }}>
                         <span>Current: {data.currReading2 || 0}</span>
                         <span>Previous: {data.prevReading2 || 0}</span>
                         <span style={{ fontWeight: 'bold', color: '#000' }}>= {units2} Units</span>
                     </div>
                 </div>
 
-                {/* Summary Line */}
+                {/* Summary */}
                 <div style={{ borderTop: '2px solid #ddd', marginTop: '10px', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', color: '#1e40af' }}>
                   <span>{calculationLabel}:</span>
                   <span>{finalUnits} Units</span>
@@ -125,7 +128,7 @@ const BillTemplate = React.forwardRef(({ data }, ref) => {
             )}
           </div>
 
-          {/* Units Consumed Highlight */}
+          {/* Units Consumed */}
           <div style={{ marginTop: '20px', textAlign: 'center', border: '2px dashed #3b82f6', backgroundColor: '#eff6ff', borderRadius: '8px', paddingTop: '12px' }}>
               <span style={{ fontSize: '12px', color: '#1e40af', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>Units Consumed</span>
               <div style={{ fontSize: '36px', fontWeight: '900', color: '#1e40af', lineHeight: '1', marginTop: '5px' }}>{finalUnits > 0 ? finalUnits : 0}</div>
